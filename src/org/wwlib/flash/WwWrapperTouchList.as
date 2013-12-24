@@ -58,13 +58,13 @@ package org.wwlib.flash
 		private var __minY:Number = 0;
 		private var __maxY:Number = 0;
 		private var __totalY:Number;
-		private var __scrollRatio:Number = 3; // how many pixels constitutes a touch
+		private var __scrollRatio:Number = 10; // how many pixels constitutes a touch
 		
 		//------- Touch Events --------
 		
 		private var __isTouching:Boolean = false;
 		private var __tapDelayTime:Number = 0;
-		private var __maxTapDelayTime:Number = 1; // change this to increase or descrease tap sensitivity
+		private var __maxTapDelayTime:Number = 0; // change this to increase or descrease tap sensitivity
 		private var __tapItem:WwWrapperTouchListItem;
 		private var __tapEnabled:Boolean = false;
 		
