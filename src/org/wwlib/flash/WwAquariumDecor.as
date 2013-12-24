@@ -41,8 +41,10 @@ package org.wwlib.flash
 		private var __frameSeconds:Number;
 		private var __secondsPerFrame:Number;
 		
+		private var __selectable:Boolean;
 		private var __mc:MovieClip;
 		private var __scale:Number;
+		private var __flipX:Number; //used for horizontal flipping
 		private var __objectPlane:MovieClip;
 		private var __state:String;
 		private var __velocityVector:Point;
@@ -74,7 +76,9 @@ package org.wwlib.flash
 		public function WwAquariumDecor(_controller, _mc:MovieClip, _object_plane:MovieClip, _frame_rate:Number=12.0)
 		{
 			__controller = _controller;
+			__selectable = true;
 			__mc = _mc;
+			__flipX = 1.0;
 			scale = __mc.scaleX;
 			__objectPlane = _object_plane;
 			__objectPlane.addChild(__mc);
@@ -104,9 +108,12 @@ package org.wwlib.flash
 		public function onMouseDown(e:Event):void
 		{
 			e.stopImmediatePropagation();
-			__mc.startDrag();
-			__mc.filters = __selectedFilters;
-			__controller.onObjectSelected(this);
+			if (__selectable)
+			{
+				__mc.startDrag();
+				__mc.filters = __selectedFilters;
+				__controller.onObjectSelected(this);
+			}
 		}
 		
 		public function onMouseUp(e:Event):void
@@ -138,15 +145,20 @@ package org.wwlib.flash
 			if (__mc.x < TOP_LEFT_BOUND.x)
 			{
 				__mc.x = TOP_LEFT_BOUND.x;
-				__velocityVector.x *= -1.0;
-				__mc.scaleX *= -1.0;
+				flipX();
 			}
 			if (__mc.x > BOTTOM_RIGHT_BOUND.x)
 			{
 				__mc.x = BOTTOM_RIGHT_BOUND.x;
-				__velocityVector.x *= -1.0;
-				__mc.scaleX *= -1.0;
+				flipX();
 			}
+		}
+		
+		public function flipX():void
+		{
+			__velocityVector.x *= -1.0;
+			__flipX *= -1.0;
+			__mc.scaleX = __scale * __flipX;
 		}
 		
 		public function anim_callback(_mc:MovieClip, _state:String):void
@@ -212,7 +224,7 @@ package org.wwlib.flash
 		public function set scale(s:Number):void
 		{
 			__scale = s;
-			__mc.scaleX = __scale;
+			__mc.scaleX = __scale * __flipX;
 			__mc.scaleY = __scale;
 		}
 		
@@ -221,9 +233,14 @@ package org.wwlib.flash
 			return __controller;
 		}
 		
+		public function set selectable(_flag:Boolean):void
+		{
+			__selectable = _flag;
+		}
+		
 		public function dispose():void
 		{
-			__objectPlane.removeChild(__mc);
+			//__objectPlane.removeChild(__mc);
 			__objectPlane = null;
 			__mc = null;
 			__velocityVector = null;

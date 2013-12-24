@@ -4,6 +4,7 @@ package org.wwlib.flash
 	import flash.events.AccelerometerEvent;
 	
 	import org.wwlib.WwAquarium.fish.fish_type_1;
+	import org.wwlib.WwAquarium.fish.fish_type_2;
 	import org.wwlib.starling.WwAquariumScene;
 	import org.wwlib.utils.WwDebug;
 	
@@ -57,7 +58,7 @@ package org.wwlib.flash
 		{
 		}
 		
-		public function newObject(_type, _x, _y):void
+		public function newObject(_type, _x, _y):WwAquariumFish
 		{
 			var _object_mc:MovieClip;
 			switch(_type)
@@ -65,6 +66,11 @@ package org.wwlib.flash
 				case TYPE_1:
 				{
 					_object_mc = new org.wwlib.WwAquarium.fish.fish_type_1() as MovieClip;
+					break;
+				}
+				case TYPE_2:
+				{
+					_object_mc = new org.wwlib.WwAquarium.fish.fish_type_2() as MovieClip;
 					break;
 				}
 					
@@ -80,7 +86,12 @@ package org.wwlib.flash
 				_object_mc.y = _y;
 				var _object:WwAquariumFish = new WwAquariumFish(this, _object_mc, __objectPlane);
 				__objectList.push(_object);
+				__activeObject = _object;
+				
+				return _object;
 			}
+			
+			return null;
 		}
 		
 		public function onObjectSelected(_object:WwAquariumFish):void
@@ -98,7 +109,7 @@ package org.wwlib.flash
 			
 		}
 		
-		public function removeObject(_object:WwAquariumFish):WwAquariumFish
+		public function removeObject(_object:WwAquariumFish, _dispose:Boolean=false):WwAquariumFish
 		{
 			var temp_object:WwAquariumFish;
 			var index:int = 0;
@@ -113,6 +124,10 @@ package org.wwlib.flash
 					WwDebug.instance.msg("removeObject: found: splicing: " + index + ":" + index_plus_one, "1");
 					__objectList.splice(index, 1);
 					__objectPlane.removeChild(temp_object.mc);
+					if (_dispose)
+					{
+						temp_object.dispose();
+					}
 					break;
 				}
 				index++;
@@ -133,6 +148,21 @@ package org.wwlib.flash
 				case WwAquariumMenuFishTools.FISH_TOOLS_TYPE_2:
 				{
 					__activeObject.scale *= 0.9;
+					break;
+				}
+				case WwAquariumMenuFishTools.FISH_TOOLS_TYPE_3:
+				{
+					__activeObject.flipX();
+					break;
+				}
+				case WwAquariumMenuFishTools.FISH_TOOLS_TYPE_4:
+				{
+					__activeObject.flipX();
+					break;
+				}
+				case WwAquariumMenuFishTools.FISH_TOOLS_TYPE_7:
+				{
+					removeObject(__activeObject, true);
 					break;
 				}
 				case WwAquariumMenuFishTools.FISH_TOOLS_TYPE_8:

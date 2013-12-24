@@ -51,6 +51,7 @@ package org.wwlib.flash
 		public static const TYPE_16:String = "decor_type_16";
 		public static const TYPE_17:String = "decor_type_17";
 		public static const TYPE_18:String = "decor_type_18";
+		public static const TYPE_19:String = "decor_type_19";
 		
 		//DEPENDENCIES make sure copiler includes classes that will be instantiated dynamically
 		private var __type_1_dependency:org.wwlib.WwAquarium.decor.decor_type_1;
@@ -71,6 +72,7 @@ package org.wwlib.flash
 		private var __type_16_dependency:org.wwlib.WwAquarium.decor.decor_type_16;
 		private var __type_17_dependency:org.wwlib.WwAquarium.decor.decor_type_17;
 		private var __type_18_dependency:org.wwlib.WwAquarium.decor.decor_type_18;
+		private var __type_19_dependency:org.wwlib.WwAquarium.decor.decor_type_19;
 		
 		private var __debug:WwDebug;
 		
@@ -111,7 +113,7 @@ package org.wwlib.flash
 		{
 		}
 		
-		public function newObject(_type:String, _x:Number, _y:Number):void
+		public function newObject(_type:String, _x:Number, _y:Number):WwAquariumDecor
 		{
 			var _object_mc:MovieClip;
 			
@@ -129,12 +131,17 @@ package org.wwlib.flash
 					_object_mc.y = _y;
 					var _object:WwAquariumDecor = new WwAquariumDecor(this, _object_mc, __objectPlane);
 					__objectList.push(_object);
+					__activeObject = _object;
+					
+					return _object;
 				}
 			} 
 			catch(e:Error) 
 			{
 				WwDebug.instance.msg("  DecorController: addObject: " + e, "1");
 			}
+			
+			return null;
 			
 		}
 		
@@ -153,7 +160,7 @@ package org.wwlib.flash
 			
 		}
 		
-		public function removeObject(_object:WwAquariumDecor):WwAquariumDecor
+		public function removeObject(_object:WwAquariumDecor, _dispose:Boolean=false):WwAquariumDecor
 		{
 			var temp_object:WwAquariumDecor;
 			var index:int = 0;
@@ -168,6 +175,10 @@ package org.wwlib.flash
 					WwDebug.instance.msg("removeObject: found: splicing: " + index + ":" + index_plus_one, "1");
 					__objectList.splice(index, 1);
 					__objectPlane.removeChild(temp_object.mc);
+					if (_dispose)
+					{
+						temp_object.dispose();
+					}
 					break;
 				}
 				index++;
@@ -190,7 +201,21 @@ package org.wwlib.flash
 					__activeObject.scale *= 0.9;
 					break;
 				}
-					
+				case WwAquariumMenuDecorTools.DECOR_TOOLS_TYPE_3:
+				{
+					__activeObject.flipX();
+					break;
+				}
+				case WwAquariumMenuDecorTools.DECOR_TOOLS_TYPE_4:
+				{
+					__activeObject.flipX();
+					break;
+				}
+				case WwAquariumMenuDecorTools.DECOR_TOOLS_TYPE_7:
+				{
+					removeObject(__activeObject, true);
+					break;
+				}
 				default:
 				{
 					break;

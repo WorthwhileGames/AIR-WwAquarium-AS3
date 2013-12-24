@@ -42,6 +42,7 @@ package org.wwlib.flash
 		
 		private var __mc:MovieClip;
 		private var __scale:Number;
+		private var __flipX:Number; //used for horizontal flipping
 		private var __fishPlane:MovieClip;
 		private var __state:String;
 		private var __velocityVector:Point;
@@ -74,6 +75,7 @@ package org.wwlib.flash
 		{
 			__controller = _controller;
 			__mc = _mc;
+			__flipX = 1.0;
 			scale = __mc.scaleX;
 			__fishPlane = _fish_plane;
 			__fishPlane.addChild(__mc);
@@ -141,15 +143,20 @@ package org.wwlib.flash
 			if (__mc.x < TOP_LEFT_BOUND.x)
 			{
 				__mc.x = TOP_LEFT_BOUND.x;
-				__velocityVector.x *= -1.0;
-				__mc.scaleX *= -1.0;
+				flipX();
 			}
 			if (__mc.x > BOTTOM_RIGHT_BOUND.x)
 			{
 				__mc.x = BOTTOM_RIGHT_BOUND.x;
-				__velocityVector.x *= -1.0;
-				__mc.scaleX *= -1.0;
+				flipX();
 			}
+		}
+		
+		public function flipX():void
+		{
+			__velocityVector.x *= -1.0;
+			__flipX *= -1.0;
+			__mc.scaleX = __scale * __flipX;
 		}
 		
 		public function anim_callback(_mc:MovieClip, _state:String):void
@@ -182,6 +189,7 @@ package org.wwlib.flash
 		public function loop_callback(_mc:MovieClip, _state:String):void
 		{
 			__mc.gotoAndStop(_state);
+			//WwAudioManager.playSound("bubbles");
 		}
 
 		public function labels_callback(_list:Array):void
@@ -215,7 +223,7 @@ package org.wwlib.flash
 		public function set scale(s:Number):void
 		{
 			__scale = s;
-			__mc.scaleX = __scale;
+			__mc.scaleX = __scale * __flipX;
 			__mc.scaleY = __scale;
 		}
 		
@@ -226,7 +234,7 @@ package org.wwlib.flash
 		
 		public function dispose():void
 		{
-			__fishPlane.removeChild(__mc);
+			//__fishPlane.removeChild(__mc);
 			__fishPlane = null;
 			__mc = null;
 			__velocityVector = null;

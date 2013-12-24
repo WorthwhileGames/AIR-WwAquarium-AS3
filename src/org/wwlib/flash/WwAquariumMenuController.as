@@ -80,9 +80,9 @@ package org.wwlib.flash
 				__menu.dragRect = new Rectangle(864, 64, 130, 0);
 				
 				__toolsTouchList = new WwAquariumMenuTools(this, __tools_mc,"tool_", 4);
-				__fishTouchList = new WwAquariumMenuFish(this, __fish_mc,"fish_type_", 1);
+				__fishTouchList = new WwAquariumMenuFish(this, __fish_mc,"fish_type_", 2);
 				__backgroundsTouchList = new WwAquariumMenuBackgrounds(this, __backgrounds_mc,"background_", 4);
-				__decorTouchList = new WwAquariumMenuDecor(this, __decor_mc,"decor_type_", 15);
+				__decorTouchList = new WwAquariumMenuDecor(this, __decor_mc,"decor_type_", 16);
 				__decorToolsTouchList = new WwAquariumMenuDecorTools(this, __decor_tools_mc,"decor_tools_type_", 7);
 				__gearTouchList = new WwAquariumMenuFishTools(this, __gear_mc,"fish_tools_type_", 11);
 				
@@ -255,13 +255,21 @@ package org.wwlib.flash
 		public function onSelectDecorToolsType(_type:String):void
 		{
 			__aquariumScene.onSelectDecorToolsType(_type);
-			//showDecor();
+			if (_type == WwAquariumMenuDecorTools.DECOR_TOOLS_TYPE_7) //delete fish
+			{
+				__aquariumScene..activeObject = null;
+				showDecor();
+			}
 		}
 		
 		public function onSelectFishToolsType(_type:String):void
 		{
 			__aquariumScene.onSelectFishToolsType(_type);
-			//showFish();
+			if (_type == WwAquariumMenuFishTools.FISH_TOOLS_TYPE_7) //delete fish
+			{
+				__aquariumScene.activeFish = null;
+				showFish();
+			}
 		}
 		
 		public function get aquariumScene():WwAquariumScene

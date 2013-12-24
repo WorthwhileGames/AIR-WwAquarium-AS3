@@ -19,6 +19,9 @@ package org.wwlib.starling
 	import org.wwlib.flash.WwAquariumMenuController;
 	import org.wwlib.flash.WwAquariumMenuDecorTools;
 	import org.wwlib.flash.WwAquariumMenuFishTools;
+	import org.wwlib.flash.WwAudioManager;
+
+
 	import org.wwlib.utils.WwDeviceInfo;
 	import org.wwlib.utils.WwGoViral;
 	
@@ -117,12 +120,12 @@ package org.wwlib.starling
 			{
 				case UI_MODE_FISH:
 				{
-					__fishControllerFG.newObject(__UIModeActiveType, mx, my);
+					//__fishControllerFG.newObject(__UIModeActiveType, mx, my);
 					break;
 				}
 				case UI_MODE_DECOR:
 				{
-					__decorControllerFG.newObject(__UIModeActiveType, mx, my);
+					//__decorControllerFG.newObject(__UIModeActiveType, mx, my);
 					break;
 				}
 				default:
@@ -172,6 +175,7 @@ package org.wwlib.starling
 			__UI_AquariumFrame.visible = false;
 			//Starling.current.showStats = true;
 			
+			WwAudioManager.playSound("bubblesLoop");
 			
 			var xml_xtra:XML = xml.xtra[0];
 			try 
@@ -199,11 +203,14 @@ package org.wwlib.starling
 					__fishControllerBG = new WwAquariumFishController(this, __fishPlaneBG, 1.0);
 					__fishControllerFG = new WwAquariumFishController(this, __fishPlaneFG, 1.0);
 					
+					var temp_object:WwAquariumDecor;
 					__decorControllerBG = new WwAquariumDecorController(this, __decorPlaneBG, 1.0);
-					__decorControllerBG.newObject(WwAquariumDecorController.TYPE_17, 0, 564);  // sand bg
+					temp_object = __decorControllerBG.newObject(WwAquariumDecorController.TYPE_18, 0, 564);  // sand bg
+					temp_object.selectable = false;
 					
 					__decorControllerFG = new WwAquariumDecorController(this, __decorPlaneFG, 1.0);
-					__decorControllerFG.newObject(WwAquariumDecorController.TYPE_18, 0, 606);  // sand fg
+					temp_object = __decorControllerFG.newObject(WwAquariumDecorController.TYPE_19, 0, 606);  // sand fg
+					temp_object.selectable = false;
 					
 					page = xml_xtra.@clrPg;
 				}
@@ -399,6 +406,8 @@ package org.wwlib.starling
 		{
 			__UIMode = UI_MODE_FISH;
 			__UIModeActiveType = _type;
+			//MAGIC NUMBER
+			__activeFish = __fishControllerFG.newObject(__UIModeActiveType, 512, 512);
 		}
 		
 		// FISH TOOLS MENU
@@ -441,6 +450,8 @@ package org.wwlib.starling
 		{
 			__UIMode = UI_MODE_DECOR;
 			__UIModeActiveType = _type;
+			//MAGIC NUMBER
+			__activeObject = __decorControllerFG.newObject(__UIModeActiveType, 512, 512);
 		}
 		
 		// DECOR TOOLS MENU

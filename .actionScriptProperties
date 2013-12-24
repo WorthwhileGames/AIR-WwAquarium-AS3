@@ -40,6 +40,7 @@
       <libraryPathEntry kind="3" linkType="1" path="/Users/andrewrapo/Documents/git/AIR-WwAquarium-FLA/WwDebug_swc.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/Users/andrewrapo/Documents/git/AIR-WwAquarium-FLA/WwAquarium_Fish_Type_1_swc.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/Users/andrewrapo/Documents/git/AIR-WwAquarium-FLA/WwAquarium_Decor_swc.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/Users/andrewrapo/Documents/git/AIR-WwAquarium-FLA/WwAquarium_Fish_Type_2_swc.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>

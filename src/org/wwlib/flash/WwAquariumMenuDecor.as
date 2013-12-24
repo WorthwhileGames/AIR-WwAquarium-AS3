@@ -36,9 +36,10 @@ package org.wwlib.flash
 			__types[13] = "Rock Bridge 2";
 			__types[14] = "Dive Helmet";
 			__types[15] = "Founders Trophy";
-			__types[16] = "Peastone";
-			__types[17] = "Sand BG";
-			__types[18] = "Sand FG";
+			__types[16] = "Christmas Tree";
+			__types[17] = "Peastone";
+			__types[18] = "Sand BG";
+			__types[19] = "Sand FG";
 			
 		}
 		
