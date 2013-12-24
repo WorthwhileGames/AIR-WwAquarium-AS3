@@ -1,6 +1,7 @@
 package org.wwlib.flash
 {
-	import com.milkmangames.nativeextensions.events.GVFacebookEvent;
+	//DECOUPLE
+	//import com.milkmangames.nativeextensions.events.GVFacebookEvent;
 	
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;

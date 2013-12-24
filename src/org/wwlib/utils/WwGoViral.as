@@ -1,6 +1,7 @@
 package org.wwlib.utils
 {
-	
+	//DECOUPLE
+	/*
 	import com.milkmangames.nativeextensions.GVFacebookFriend;
 	import com.milkmangames.nativeextensions.GVHttpMethod;
 	import com.milkmangames.nativeextensions.GVSocialServiceType;
@@ -9,7 +10,7 @@ package org.wwlib.utils
 	import com.milkmangames.nativeextensions.events.GVMailEvent;
 	import com.milkmangames.nativeextensions.events.GVShareEvent;
 	import com.milkmangames.nativeextensions.events.GVTwitterEvent;
-	
+	*/
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
