@@ -27,3 +27,4 @@ NOTE: Choose Project->Clean... to make sure the libraries are recognized.
 
 
 Christmas Tree: http://graphicssoft.about.com/od/freedownloads/ig/Free-Christmas-Graphics/Christmas-Tree-Graphic.htm
+Santa Hat: http://dryicons.com/icon/christmas-icons-set/santa-hat/ (non-commercial, for now)
