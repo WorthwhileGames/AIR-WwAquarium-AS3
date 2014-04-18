@@ -1,21 +1,28 @@
 package 
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.AccelerometerEvent;
 	import flash.events.Event;
+	import flash.events.InvokeEvent;
+	import flash.sensors.Accelerometer;
 	import flash.system.Capabilities;
+	import flash.utils.getTimer;
 	
 	import org.wwlib.WwColoring.anim.StageOuterBlocker;
 	import org.wwlib.flash.WwAlertsManager;
 	import org.wwlib.flash.WwAppBG;
+	import org.wwlib.flash.WwAudioManager;
 	import org.wwlib.starling.WwSprite;
 	import org.wwlib.utils.WwDebug;
 	import org.wwlib.utils.WwDeviceInfo;
 	import org.wwlib.utils.WwGoViral;
+	import org.wwlib.utils.WwParseManager;
 	
 	import starling.core.Starling;
 	
@@ -27,7 +34,7 @@ package
 	[SWF(backgroundColor="#FFFFFF", width="1024", height="768", frameRate="59")]
 	public class WwAquarium extends Sprite
 	{
-		private var mStarling:Starling;
+		//private var mStarling:Starling;
 		
 		private var __debug:WwDebug;
 		private var __deviceInfo:WwDeviceInfo;
@@ -35,26 +42,33 @@ package
 		private var __appFlashAlertsStage:MovieClip;
 		private var __appDebugStage:MovieClip;
 		
+		private var __accelerometer:Accelerometer;
+		private var __accelZ:Number;
+		private var __activateDebug:Boolean = false;
+		
+		private var __prevTime:int;
+		private var __frameTime:int;
+		private var __totalSeconds:Number;
+		private var __frameRate:Number;
+		
 		public static var appStage:Stage;
 		public static var stageOuterBlocker:StageOuterBlocker;
 		
 		/** Embedded the default app image for immediate display. */
 		[Embed(source="/Default-Landscape.png")]
-		private var defaultAppImageClass:Class;
-		private var defaultAppBitmap:Bitmap;
+		private var __defaultAppImageClass:Class;
+		private var __defaultAppBitmap:Bitmap;
+		private var __appStateManager:QcAppStateManager;
+		//private var __parseManager:WwParseManager;
 		
 		public function WwAquarium()
 		{
+			super();
+			
 			appStage = stage;
 			appStage.color = 0xFFFFFF;
 			appStage.scaleMode = StageScaleMode.NO_SCALE;
 			appStage.align = StageAlign.TOP_LEFT;
-			
-			// Note: So far, blocking MOUSE_DOWN propagation to starling doesn't work on the device
-			// Starling listens for its own TOUCH events
-			// appStage.addEventListener(MouseEvent.MOUSE_DOWN, onPropagationHandler);
-			
-			//Coloring uses a __uiActive flag to determine when touches should be drawn
 			
 			__appFlashStage = new MovieClip();
 			__appFlashAlertsStage = new MovieClip();
@@ -64,8 +78,8 @@ package
 			stage.addChild(__appFlashAlertsStage);
 			stage.addChild(__appDebugStage);
 			
-			defaultAppBitmap = new defaultAppImageClass() as Bitmap;
-			WwAppBG.init(__appFlashStage, defaultAppBitmap);
+			__defaultAppBitmap = new __defaultAppImageClass() as Bitmap;
+			WwAppBG.init(__appFlashStage, __defaultAppBitmap);
 			WwAppBG.show();
 			
 			stageOuterBlocker = new StageOuterBlocker();
@@ -76,7 +90,6 @@ package
 			__deviceInfo = WwDeviceInfo.init();
 			WwDebug.init(__appDebugStage);
 			__debug = WwDebug.instance;
-			
 			
 			
 			__debug.msg("os: " + __deviceInfo.os,"3");
@@ -113,31 +126,35 @@ package
 			WwSprite.__baseScaleFactor = __deviceInfo.assetScaleFactor;
 			__debug.msg("assetScaleFactor: " + __deviceInfo.assetScaleFactor,"3");
 			
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
+			__accelZ = 0;
+			__accelerometer = new Accelerometer();
+			__accelerometer.addEventListener(AccelerometerEvent.UPDATE, accelerometerUpdateHandler);
+			
+			// GoViral Manager
 			WwGoViral.init();
+			
+			// Alerts Manager
 			WwAlertsManager.init(__appFlashAlertsStage);
 			
-			Starling.multitouchEnabled = true; // useful on mobile devices
-			Starling.handleLostContext = true; // deactivate on mobile devices (to save memory)
+			// Audio Manager
+			WwAudioManager.init();
+
+			// Handler for inter-app events
+			NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
 			
-			mStarling = new Starling(Game, stage, __deviceInfo.starlingViewPort);
-			Starling.current.stage.stageWidth  = __deviceInfo.stageWidth;
-			Starling.current.stage.stageHeight = __deviceInfo.stageHeight;
-			
-			__debug.msg("Starling.current.stage.stageWidth: " + Starling.current.stage.stageWidth,"3");
-			__debug.msg("Starling.current.stage.stageWidth: " + Starling.current.stage.stageHeight,"3");
-			__debug.msg("Starling.current.contentScaleFactor: " + Starling.current.contentScaleFactor,"3");
-			
-			mStarling.simulateMultitouch = true;
-			mStarling.enableErrorChecking = Capabilities.isDebugger;
-			mStarling.start();
-			
-			// this event is dispatched when stage3D is set up
-			mStarling.stage3D.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated);
-			
-			//mStarling.showStats = true;
+			// App State Manager
+			__appStateManager = QcAppStateManager.init(this, __appFlashStage);
 			
 		}
 		
+		private function onInvoke(event:InvokeEvent):void
+		{
+			__debug.msg("onInvoke: " + event.arguments, "1");
+		}
+		
+		/*
 		private function onContextCreated(event:Event):void
 		{
 			// set framerate to 30 in software mode
@@ -145,5 +162,36 @@ package
 			if (Starling.context.driverInfo.toLowerCase().indexOf("software") != -1)
 				Starling.current.nativeStage.frameRate = 30;
 		}
+		*/
+		
+		private function onEnterFrame(event:Event):void
+		{
+			if (__appStateManager)
+			{
+				var total_milliseconds:int = getTimer();
+				__frameTime = total_milliseconds - __prevTime;
+				__prevTime = total_milliseconds;
+				__frameRate = 1000.0 / __frameTime;
+				__totalSeconds = total_milliseconds / 1000.0;
+				__appStateManager.enterFrameUpdateHandler(__frameTime, __totalSeconds);
+				WwDebug.fps = __frameRate;
+			}
+		}
+		
+		public function accelerometerUpdateHandler(event:AccelerometerEvent):void
+		{
+			if (__appStateManager)
+			{
+				__appStateManager.accelerometerUpdateHandler(event);
+				
+				// Hide debug panel expect when device is inverted
+				/*
+				__accelZ = int(event.accelerationZ * 1000)/1000;
+				__activateDebug = (__accelZ < -0.8);
+				__debug.show =__activateDebug;
+				*/
+			}
+		}
+
 	}
 }

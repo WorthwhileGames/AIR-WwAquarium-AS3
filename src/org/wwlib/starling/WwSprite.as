@@ -104,6 +104,13 @@ package org.wwlib.starling
 			__onReadyCallback = f;
 		}
 		
+		public function clearImg():void
+		{
+			removeChild(__img);
+			__img = null;
+			
+		}
+		
 		public override function dispose():void
 		{
 			removeChild(__img);

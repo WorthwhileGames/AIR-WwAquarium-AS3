@@ -1,13 +1,12 @@
 package org.wwlib.flash 
 {
 	
-	import org.wwlib.WwAquarium.ui.UI_AquariumMenu;
-	
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
+	import org.wwlib.WwAquarium.ui.UI_AquariumMenu;
 	import org.wwlib.starling.WwAquariumScene;
 	import org.wwlib.utils.WwDebug;
 
@@ -19,7 +18,7 @@ package org.wwlib.flash
 	public class WwAquariumMenuController 
 	{
 		private var __debug:WwDebug;
-		private var __aquariumScene:WwAquariumScene;
+		private var __appStateAquarium:QcAppStateAquarium;
 		
 		private var __menu_mc:UI_AquariumMenu;
 		private var __bg_mc:MovieClip;
@@ -47,10 +46,10 @@ package org.wwlib.flash
 		private var __activeTouchlist:WwWrapperTouchList
 		
 		
-		public function WwAquariumMenuController(aquarium_scene:WwAquariumScene, menu:UI_AquariumMenu)
+		public function WwAquariumMenuController(aquarium_scene:QcAppStateAquarium, menu:UI_AquariumMenu)
 		{
 			__debug = WwDebug.instance;
-			__aquariumScene = aquarium_scene;
+			__appStateAquarium = aquarium_scene;
 			__menu_mc = menu;
 			
 			if (__menu_mc)
@@ -120,7 +119,7 @@ package org.wwlib.flash
 				switch (mc.name) 
 				{
 					case "btn_home":
-						__aquariumScene.gotoMainMenu();
+						__appStateAquarium.gotoMainMenu();
 						//onControlShare(null);
 						break;
 					case "btn_back":
@@ -237,44 +236,44 @@ package org.wwlib.flash
 		
 		public function onControlShare(event:Event):void
 		{
-			__aquariumScene.onControlShare(null);
+			__appStateAquarium.onControlShare(null);
 		}
 		
 		public function onSelectFishType(_type:String):void
 		{
-			__aquariumScene.onSelectFishType(_type);
+			__appStateAquarium.onSelectFishType(_type);
 			showFishTools();
 		}
 		
 		public function onSelectDecorType(_type:String):void
 		{
-			__aquariumScene.onSelectDecorType(_type);
+			__appStateAquarium.onSelectDecorType(_type);
 			showDecorTools();
 		}
 		
 		public function onSelectDecorToolsType(_type:String):void
 		{
-			__aquariumScene.onSelectDecorToolsType(_type);
+			__appStateAquarium.onSelectDecorToolsType(_type);
 			if (_type == WwAquariumMenuDecorTools.DECOR_TOOLS_TYPE_7) //delete fish
 			{
-				__aquariumScene..activeObject = null;
+				__appStateAquarium..activeObject = null;
 				showDecor();
 			}
 		}
 		
 		public function onSelectFishToolsType(_type:String):void
 		{
-			__aquariumScene.onSelectFishToolsType(_type);
+			__appStateAquarium.onSelectFishToolsType(_type);
 			if (_type == WwAquariumMenuFishTools.FISH_TOOLS_TYPE_7) //delete fish
 			{
-				__aquariumScene.activeFish = null;
+				__appStateAquarium.activeFish = null;
 				showFish();
 			}
 		}
 		
-		public function get aquariumScene():WwAquariumScene
+		public function get appStateAquarium():QcAppStateAquarium
 		{
-			return __aquariumScene;
+			return __appStateAquarium;
 		}
 		
 		public function dispose():void

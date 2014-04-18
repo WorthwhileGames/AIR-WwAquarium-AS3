@@ -24,16 +24,16 @@ package org.wwlib.flash
 			switch (item.index) 
 			{
 				case 1:
-					__controller.aquariumScene.page = "assets/backgrounds/qc_aquarium_bg1.png"
+					__controller.appStateAquarium.setPage("assets/backgrounds/qc_aquarium_bg1.png");
 					break;
 				case 2:
-					__controller.aquariumScene.page = "assets/backgrounds/qc_aquarium_bg2.png"
+					__controller.appStateAquarium.setPage("assets/backgrounds/qc_aquarium_bg2.png");
 					break;
 				case 3:
-					__controller.aquariumScene.page = "assets/backgrounds/qc_aquarium_bg3.png"
+					__controller.appStateAquarium.setPage("assets/backgrounds/qc_aquarium_bg3.png");
 					break;
 				case 4:
-					__controller.aquariumScene.page = "assets/backgrounds/qc_aquarium_bg4.png"
+					__controller.appStateAquarium.setPage("assets/backgrounds/qc_aquarium_bg4.png");
 					break;
 				default:
 			}

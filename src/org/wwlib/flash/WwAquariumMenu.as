@@ -33,7 +33,7 @@ package org.wwlib.flash
 			// stop propagation works for MOUSE events
 			event.stopImmediatePropagation();
 			// the uiActive flag is necessary to handle device TOUCH events
-			__controller.aquariumScene.uiActive = true;
+			__controller.appStateAquarium.uiActive = true;
 			WwAudioManager.playMouseDown();
 			
 		}

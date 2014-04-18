@@ -25,13 +25,13 @@ package org.wwlib.flash
 		private var __objectPlaneScale:Number;
 		private var __objectList:Vector.<WwAquariumFish>;
 		
-		private var __aquariumScene:WwAquariumScene;
+		private var __appStateAquarium:QcAppStateAquarium;
 		private var __activeObject:WwAquariumFish;
 
 		
-		public function WwAquariumFishController(_aquarium_scene:WwAquariumScene, _object_plane:MovieClip, _object_plane_scale:Number)
+		public function WwAquariumFishController(_aquarium_scene:QcAppStateAquarium, _object_plane:MovieClip, _object_plane_scale:Number)
 		{	
-			__aquariumScene = _aquarium_scene;
+			__appStateAquarium = _aquarium_scene;
 			__objectPlane = _object_plane;
 			__objectPlaneScale = _object_plane_scale;
 			__objectList = new Vector.<WwAquariumFish>;
@@ -98,8 +98,8 @@ package org.wwlib.flash
 		{
 			WwDebug.instance.msg("DecorController: onObjectSelected: " + _object, "1");
 			__activeObject = _object;
-			__aquariumScene.activeFish = _object;
-			__aquariumScene.menuController.showFishTools();
+			__appStateAquarium.activeFish = _object;
+			__appStateAquarium.menuController.showFishTools();
 		}
 		
 		public function addObject(_object:WwAquariumFish):void
