@@ -4,6 +4,12 @@ AIR-WwAquarium-AS3
 WwAquarium is an Aquarium app module for mobile devices
 Built with Flash, Starling. Deployed via Adobe AIR to iOS and Android
 
+This project is authored with Adobe Creative Cloud: Flash Builder Premium and Flash CC
+
+The project's code is in AIR-WwAquarium-AS3
+
+The project's Flash source files are in AIR-WwAquarium-FLA
+
 To compile the project you will need to update the paths to the referenced libraries.  This includes:
 
 Air DSK
